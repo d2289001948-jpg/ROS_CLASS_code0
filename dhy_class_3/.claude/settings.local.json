@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \":*)",
+      "Read(//Users/ddd/**)",
+      "Read(//home/ddd/**)",
+      "Read(//home/ddd/下载/**)",
+      "Bash(python3:*)",
+      "Bash(ls ~/Downloads/*.docx)",
+      "Bash(ls:*)",
+      "Bash(grep -E \"\\\\.\\(cpp|py|h|hpp|launch|cfg|xml|txt\\)$\")",
+      "Bash(find . -name *.cpp -o -name *.py -o -name *.cfg -o -name CMakeLists.txt -o -name package.xml)",
+      "Bash(catkin_make)",
+      "Bash(sed -i 's/<build_depend>std_msgs<\\\\/build_depend>/<build_depend>std_msgs<\\\\/build_depend>\\\\n  <build_depend>dynamic_reconfigure<\\\\/build_depend>/' ./src/dhy_class_pkg/package.xml)",
+      "Bash(sed -i 's/<exec_depend>std_msgs<\\\\/exec_depend>/<exec_depend>std_msgs<\\\\/exec_depend>\\\\n  <exec_depend>dynamic_reconfigure<\\\\/exec_depend>/' ./src/dhy_class_pkg/package.xml)",
+      "Bash(echo $HOME)",
+      "Read(//home/ddd/ROS_class_prj/dhy_class_3/**)",
+      "Bash(DOCX=\"$HOME/下载/（第三周下）ROS调试与可视化工具实验.docx\")",
+      "Bash(echo \"HOME: $HOME\")",
+      "Bash(source /opt/ros/noetic/setup.bash)",
+      "Bash(pip3 install:*)",
+      "Bash(pip install:*)",
+      "Bash(find /home/vvcwxu/ROS_class_prj -name *.cpp)",
+      "Bash(echo \"HOME is: $HOME\")",
+      "Read(//home/ddd/ROS_class_prj/dhy_class_3/$HOME/**)"
+    ]
+  }
+}

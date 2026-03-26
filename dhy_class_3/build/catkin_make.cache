@@ -1,0 +1,2 @@
+dhy_class_pkg
+-DCATKIN_DEVEL_PREFIX=/home/ddd/ROS_class_prj/dhy_class_3/devel -DCMAKE_INSTALL_PREFIX=/home/ddd/ROS_class_prj/dhy_class_3/install -G Unix Makefiles

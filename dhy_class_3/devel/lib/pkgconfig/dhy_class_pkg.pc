@@ -1,0 +1,8 @@
+prefix=/home/ddd/ROS_class_prj/dhy_class_3/devel
+
+Name: dhy_class_pkg
+Description: Description of dhy_class_pkg
+Version: 0.0.0
+Cflags: -I/home/ddd/ROS_class_prj/dhy_class_3/devel/include
+Libs: -L${prefix}/lib 
+Requires: 

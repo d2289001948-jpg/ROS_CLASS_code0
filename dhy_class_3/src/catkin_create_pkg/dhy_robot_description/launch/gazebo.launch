@@ -1,0 +1,28 @@
+<launch>
+  <!-- 启动 Gazebo 仿真环境 -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+  </include>
+
+  <!-- 加载转换后的 URDF 文件 -->
+  <param name="robot_description" 
+         textfile="$(find dhy_robot_description)/urdf/two_wheel_robot.urdf"/>
+
+  <!-- 关节状态发布 -->
+  <node name="joint_state_publisher" 
+        pkg="joint_state_publisher" 
+        type="joint_state_publisher"/>
+
+  <!-- 机器人状态发布 -->
+  <node name="robot_state_publisher" 
+        pkg="robot_state_publisher" 
+        type="robot_state_publisher"/>
+
+  <!-- 在 Gazebo 中生成小车 -->
+  <node name="spawn_robot" 
+        pkg="gazebo_ros" 
+        type="spawn_model" 
+        args="-urdf -param robot_description -model car -x 0 -y 0 -z 0.1"/>
+</launch>

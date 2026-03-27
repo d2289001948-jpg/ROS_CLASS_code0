@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<robot name="simple_robot">
+
+  <!-- 底盘（完全不变） -->
+  <link name="base_link">
+    <visual>
+      <geometry><box size="0.3 0.2 0.1"/></geometry>
+      <material name="ferrari_red"><color rgba="0.95 0.15 0.15 1.0"/></material>
+    </visual>
+    <collision>
+      <geometry><box size="0.3 0.2 0.1"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+  </link>
+  <gazebo reference="base_link">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <!-- 左轮：转轴正确 + 姿态修正（平行XZ平面） -->
+  <link name="wheel_left_link">
+    <visual>
+      <geometry><cylinder radius="0.05" length="0.02"/></geometry>
+      <material name="black"><color rgba="0.08 0.08 0.08 1.0"/></material>
+    </visual>
+    <collision>
+      <geometry><cylinder radius="0.05" length="0.02"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.0005" ixy="0" ixz="0" iyy="0.0005" iyz="0" izz="0.0005"/>
+    </inertial>
+  </link>
+  <gazebo reference="wheel_left_link"><material>Gazebo/Black</material></gazebo>
+  <joint name="wheel_left_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_left_link"/>
+    <!-- ✅ 仅修正：rpy旋转 → 轮子平面平行XZ平面 -->
+    <origin xyz="0.0 0.11 -0.05" rpy="1.5708 0 0"/>
+    <!-- ✅ 转轴保留正确：绕X轴转动 -->
+    <axis xyz="1 0 0"/>
+  </joint>
+
+  <!-- 右轮：转轴正确 + 姿态修正（平行XZ平面） -->
+  <link name="wheel_right_link">
+    <visual>
+      <geometry><cylinder radius="0.05" length="0.02"/></geometry>
+      <material name="black"><color rgba="0.08 0.08 0.08 1.0"/></material>
+    </visual>
+    <collision>
+      <geometry><cylinder radius="0.05" length="0.02"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.0005" ixy="0" ixz="0" iyy="0.0005" iyz="0" izz="0.0005"/>
+    </inertial>
+  </link>
+  <gazebo reference="wheel_right_link"><material>Gazebo/Black</material></gazebo>
+  <joint name="wheel_right_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_right_link"/>
+    <!-- ✅ 仅修正：rpy旋转 → 轮子平面平行XZ平面 -->
+    <origin xyz="0.0 -0.11 -0.05" rpy="1.5708 0 0"/>
+    <!-- ✅ 转轴保留正确：绕X轴转动 -->
+    <axis xyz="1 0 0"/>
+  </joint>
+
+  <!-- 万向轮（完全不变） -->
+  <link name="caster_link">
+    <visual>
+      <geometry><sphere radius="0.03"/></geometry>
+      <material name="gray"><color rgba="0.25 0.25 0.25 1.0"/></material>
+    </visual>
+    <collision>
+      <geometry><sphere radius="0.03"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.05"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <gazebo reference="caster_link"><material>Gazebo/Gray</material></gazebo>
+  <joint name="caster_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_link"/>
+    <origin xyz="-0.12 0 -0.06"/>
+  </joint>
+
+  <!-- 差速插件（完全不变） -->
+  <gazebo>
+    <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+        <alwaysOn>true</alwaysOn>
+        <leftJoint>wheel_left_joint</leftJoint>
+        <rightJoint>wheel_right_joint</rightJoint>
+        <wheelSeparation>0.22</wheelSeparation>
+        <wheelDiameter>0.1</wheelDiameter>
+        <torque>10</torque>
+        <commandTopic>cmd_vel</commandTopic>
+        <odometryTopic>odom</odometryTopic>
+        <odometryFrame>odom</odometryFrame>
+        <robotBaseFrame>base_link</robotBaseFrame>
+    </plugin>
+  </gazebo>
+
+</robot>

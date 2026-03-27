@@ -1,0 +1,8 @@
+prefix=/home/ddd/ROS_class_prj/dhy_class_3/install
+
+Name: dhy_robot_description
+Description: Description of dhy_robot_description
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

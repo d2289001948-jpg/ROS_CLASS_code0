@@ -6,3 +6,4 @@
 # testing this directory and lists subdirectories to be tested as well.
 subdirs("gtest")
 subdirs("dhy_class_pkg")
+subdirs("catkin_create_pkg/dhy_robot_description")

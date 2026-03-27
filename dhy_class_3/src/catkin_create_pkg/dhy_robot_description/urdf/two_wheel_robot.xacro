@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<robot name="two_wheel_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- 全局参数 -->
+  <xacro:property name="base_length" value="0.3"/>
+  <xacro:property name="base_width" value="0.2"/>
+  <xacro:property name="base_height" value="0.1"/>
+  <xacro:property name="wheel_r" value="0.05"/>
+  <xacro:property name="wheel_l" value="0.02"/>
+  <xacro:property name="wheel_space" value="0.22"/>
+
+  <!-- 轮子宏：转轴100%垂直轮子圆面 -->
+  <xacro:macro name="wheel" params="name x y z">
+    <link name="${name}_wheel">
+      <visual>
+        <geometry><cylinder radius="${wheel_r}" length="${wheel_l}"/></geometry>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <geometry><cylinder radius="${wheel_r}" length="${wheel_l}"/></geometry>
+      </collision>
+      <!-- 完整惯性矩阵，修复Gazebo报错 -->
+      <inertial>
+        <mass value="0.1"/>
+        <inertia ixx="0.0005" ixy="0.0" ixz="0.0" iyy="0.0005" iyz="0.0" izz="0.0005"/>
+      </inertial>
+    </link>
+    <joint name="${name}_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${name}_wheel"/>
+      <origin xyz="${x} ${y} ${z}" rpy="1.5708 0 0"/>
+      <!-- 终极正确：转轴垂直轮子圆面 -->
+      <axis xyz="0 0 1"/>
+    </joint>
+    <gazebo reference="${name}_wheel">
+      <material>Gazebo/Black</material>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- 底盘 -->
+  <link name="base_link">
+    <visual>
+      <geometry><box size="${base_length} ${base_width} ${base_height}"/></geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <geometry><box size="${base_length} ${base_width} ${base_height}"/></geometry>
+    </collision>
+    <!-- 完整惯性矩阵 -->
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+  <gazebo reference="base_link">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <!-- 左右轮 -->
+  <xacro:wheel name="left" x="0.0" y="${wheel_space/2}" z="-0.05"/>
+  <xacro:wheel name="right" x="0.0" y="-${wheel_space/2}" z="-0.05"/>
+
+  <!-- 万向轮 -->
+  <link name="caster_wheel">
+    <visual>
+      <geometry><sphere radius="0.03"/></geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <geometry><sphere radius="0.03"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.05"/>
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="caster_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_wheel"/>
+    <origin xyz="-0.12 0 -0.06"/>
+  </joint>
+  <gazebo reference="caster_wheel">
+    <material>Gazebo/Gray</material>
+  </gazebo>
+
+  <!-- 差速驱动插件 -->
+  <gazebo>
+    <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+      <alwaysOn>true</alwaysOn>
+      <leftJoint>left_joint</leftJoint>
+      <rightJoint>right_joint</rightJoint>
+      <wheelSeparation>${wheel_space}</wheelSeparation>
+      <wheelDiameter>${wheel_r*2}</wheelDiameter>
+      <torque>10</torque>
+      <commandTopic>cmd_vel</commandTopic>
+    </plugin>
+  </gazebo>
+</robot>

@@ -147,6 +147,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/ddd/ROS_class_prj/dhy_class_3/build/gtest/cmake_install.cmake")
   include("/home/ddd/ROS_class_prj/dhy_class_3/build/dhy_class_pkg/cmake_install.cmake")
+  include("/home/ddd/ROS_class_prj/dhy_class_3/build/catkin_create_pkg/dhy_robot_description/cmake_install.cmake")
 
 endif()
 
